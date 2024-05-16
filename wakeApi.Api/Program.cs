@@ -1,3 +1,5 @@
+using wakeInfra.Infra.Context.Global;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -17,6 +19,19 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseRouting();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+// Seed the database
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    SeedInitializeDataBase.Initialize(services);
+}
 
 app.Run();
 

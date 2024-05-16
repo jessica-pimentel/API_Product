@@ -12,6 +12,7 @@ namespace wakeDomain.Domain.Models
         public Guid ProductId { get; set; } = Guid.NewGuid();
         public string ProductName { get; set; }
         public decimal ProductPrice { get; set; }
+        public int Inventory { get; set; }
 
     }
 }
