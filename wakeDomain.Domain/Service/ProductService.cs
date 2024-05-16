@@ -19,7 +19,7 @@ namespace wakeDomain.Domain.Service
         }
         public async Task<bool> Add(Product product)
         {
-            if (product.ProductPrice < 0)
+            if (product.ProductPrice < 0m)
                 throw new ArgumentException("O valor do produto não pode ser negativo.");
 
             return await _productRepository.Add(product);
@@ -42,7 +42,7 @@ namespace wakeDomain.Domain.Service
 
         public async Task<Product> Update(Product product)
         {
-            if (product.ProductPrice < 0)
+            if (product.ProductPrice < 0m)
                 throw new ArgumentException("O valor do produto não pode ser negativo.");
 
             return await _productRepository.Update(product);
