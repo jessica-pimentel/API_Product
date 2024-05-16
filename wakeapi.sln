@@ -3,21 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wakeApi.Api", "wakeApi.Api\wakeApi.Api.csproj", "{503442A9-2A08-48BF-A7A8-229B785C4A41}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "wakeApi.Api", "wakeApi.Api\wakeApi.Api.csproj", "{503442A9-2A08-48BF-A7A8-229B785C4A41}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wakeDomain.Domain", "wakeDomain.Domain\wakeDomain.Domain.csproj", "{0B311B4E-6ACF-4D2F-9772-3FDB31C6D7F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "wakeDomain.Domain", "wakeDomain.Domain\wakeDomain.Domain.csproj", "{0B311B4E-6ACF-4D2F-9772-3FDB31C6D7F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wakeApplication.Application", "wakeApplication.Application\wakeApplication.Application.csproj", "{82E178B4-FE9F-4172-9DAE-017E25BAA723}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wakeInfra.Infra", "wakeInfra.Infra\wakeInfra.Infra.csproj", "{ECC188B0-CA8A-4E43-A05C-E87E48DEE1F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "wakeInfra.Infra", "wakeInfra.Infra\wakeInfra.Infra.csproj", "{ECC188B0-CA8A-4E43-A05C-E87E48DEE1F2}"
 EndProject
 Global
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {44C17847-2103-4118-8EDF-11152C218DFB}
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
@@ -51,18 +43,6 @@ Global
 		{0B311B4E-6ACF-4D2F-9772-3FDB31C6D7F2}.Release|x64.Build.0 = Release|Any CPU
 		{0B311B4E-6ACF-4D2F-9772-3FDB31C6D7F2}.Release|x86.ActiveCfg = Release|Any CPU
 		{0B311B4E-6ACF-4D2F-9772-3FDB31C6D7F2}.Release|x86.Build.0 = Release|Any CPU
-		{82E178B4-FE9F-4172-9DAE-017E25BAA723}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{82E178B4-FE9F-4172-9DAE-017E25BAA723}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{82E178B4-FE9F-4172-9DAE-017E25BAA723}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{82E178B4-FE9F-4172-9DAE-017E25BAA723}.Debug|x64.Build.0 = Debug|Any CPU
-		{82E178B4-FE9F-4172-9DAE-017E25BAA723}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{82E178B4-FE9F-4172-9DAE-017E25BAA723}.Debug|x86.Build.0 = Debug|Any CPU
-		{82E178B4-FE9F-4172-9DAE-017E25BAA723}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{82E178B4-FE9F-4172-9DAE-017E25BAA723}.Release|Any CPU.Build.0 = Release|Any CPU
-		{82E178B4-FE9F-4172-9DAE-017E25BAA723}.Release|x64.ActiveCfg = Release|Any CPU
-		{82E178B4-FE9F-4172-9DAE-017E25BAA723}.Release|x64.Build.0 = Release|Any CPU
-		{82E178B4-FE9F-4172-9DAE-017E25BAA723}.Release|x86.ActiveCfg = Release|Any CPU
-		{82E178B4-FE9F-4172-9DAE-017E25BAA723}.Release|x86.Build.0 = Release|Any CPU
 		{ECC188B0-CA8A-4E43-A05C-E87E48DEE1F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ECC188B0-CA8A-4E43-A05C-E87E48DEE1F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECC188B0-CA8A-4E43-A05C-E87E48DEE1F2}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -75,5 +55,11 @@ Global
 		{ECC188B0-CA8A-4E43-A05C-E87E48DEE1F2}.Release|x64.Build.0 = Release|Any CPU
 		{ECC188B0-CA8A-4E43-A05C-E87E48DEE1F2}.Release|x86.ActiveCfg = Release|Any CPU
 		{ECC188B0-CA8A-4E43-A05C-E87E48DEE1F2}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {44C17847-2103-4118-8EDF-11152C218DFB}
 	EndGlobalSection
 EndGlobal

@@ -11,8 +11,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\wakeApplication.Application\wakeApplication.Application.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\wakeDomain.Domain\wakeDomain.Domain.csproj" />
+		<ProjectReference Include="..\wakeInfra.Infra\wakeInfra.Infra.csproj" />
+	</ItemGroup>
 
 </Project>
