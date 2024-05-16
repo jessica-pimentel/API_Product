@@ -1,73 +1,108 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using wakeDomain.Domain.Interfaces.Repository;
 using wakeDomain.Domain.Models;
+using wakeInfra.Infra.Context;
 
 namespace wakeInfra.Infra.Repository
 {
     public class ProductRepository : IProductRepository
     {
-        private readonly List<Product> _products = new List<Product>();
-
-        public Task<bool> Add(Product product)
+        private readonly ProductContext _context;
+        public ProductRepository(ProductContext context)
         {
-            product.ProductId = Guid.NewGuid();
-
-            _products.Add(product);
-
-            return Task.FromResult(true);
+            _context = context;   
         }
 
-        public Task<bool> Delete(Guid productId)
+        public async Task<bool> Add(Product product)
         {
-            var product = _products.FirstOrDefault(p => p.ProductId == productId);
+            product.ProductId = Guid.NewGuid();
+            product.CreatedAt = DateTime.Now;
+            product.UpdatedAt = DateTime.Now;
+
+            await _context.Products.AddAsync(product);
+
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> Delete(Guid productId)
+        {
+            var product = await _context.Products.FindAsync(productId);
 
             if (product != null)
             {
                 product.IsDeleted = 1;
-
                 product.UpdatedAt = DateTime.Now;
-
-                return Task.FromResult(true);
+                _context.Products.Update(product);
+                await _context.SaveChangesAsync();
+                return true;
             }
 
-            return Task.FromResult(false);
+            return false;
         }
 
-        public Task<IEnumerable<Product>> GetAll()
+        public async Task<IEnumerable<Product>> GetAll()
         {
-            var products = _products.Where(p => p.IsDeleted == 0).ToList();
-
-            return Task.FromResult((IEnumerable<Product>)products);
+            return await _context.Products.Where(p => p.IsDeleted == 0).ToListAsync();
         }
 
-        public Task<Product> GetById(Guid productId)
+        public async Task<Product> GetById(Guid productId)
         {
-            var product = _products.FirstOrDefault(p => p.ProductId == productId && p.IsDeleted == 0);
-
-            return Task.FromResult(product);
+            return await _context.Products.FirstOrDefaultAsync(p => p.ProductId == productId && p.IsDeleted == 0);
         }
 
-        public Task<Product> Update(Product product)
+        public async Task<Product> Update(Product product)
         {
-            var existingProduct = _products.FirstOrDefault(p => p.ProductId == product.ProductId && p.IsDeleted == 0);
+            var existingProduct = await _context.Products.FindAsync(product.ProductId);
 
-            if (existingProduct != null)
+            if (existingProduct != null && existingProduct.IsDeleted == 0)
             {
                 existingProduct.ProductName = product.ProductName;
-
                 existingProduct.ProductPrice = product.ProductPrice;
-
                 existingProduct.Inventory = product.Inventory;
-
                 existingProduct.UpdatedAt = DateTime.Now;
 
-                return Task.FromResult(existingProduct);
+                _context.Products.Update(existingProduct);
+
+                await _context.SaveChangesAsync();
+
+                return existingProduct;
             }
-            return Task.FromResult<Product>(null);
+
+            return null;
+        }
+
+        public async Task<IEnumerable<Product>> SearchByName(string name)
+        {
+            return await _context.Products.Where(p => p.ProductName.Contains(name) && p.IsDeleted == 0).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Product>> OrderByType(string type)
+        {
+            IQueryable<Product> query = _context.Products.Where(p => p.IsDeleted == 0);
+
+            switch (type.ToLower())
+            {
+                case "name":
+                    query = query.OrderBy(p => p.ProductName);
+                    break;
+                case "price":
+                    query = query.OrderBy(p => p.ProductPrice);
+                    break;
+                case "inventory":
+                    query = query.OrderBy(p => p.Inventory);
+                    break;
+                default:
+                    break;
+            }
+
+            return await query.ToListAsync();
         }
     }
 }

@@ -47,5 +47,15 @@ namespace wakeDomain.Domain.Service
 
             return await _productRepository.Update(product);
         }
+
+        public async Task<IEnumerable<Product>> SearchByName(string name)
+        {
+            return await _productRepository.SearchByName(name);
+        }
+
+        public async Task<IEnumerable<Product>> OrderByType(string type)
+        {
+            return await _productRepository.OrderByType(type);
+        }
     }
 }

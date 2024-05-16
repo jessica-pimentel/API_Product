@@ -14,5 +14,7 @@ namespace wakeDomain.Domain.Interfaces.Repository
         Task<bool> Add(Product product);
         Task<Product> Update(Product product);
         Task<bool> Delete(Guid productid);
+        Task<IEnumerable<Product>> SearchByName(string name);
+        Task<IEnumerable<Product>> OrderByType(string type);
     }
 }
