@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using wakeDomain.Domain.Interfaces.Repository;
 using wakeDomain.Domain.Interfaces.Service;
 using wakeDomain.Domain.Models;
 
@@ -10,29 +11,35 @@ namespace wakeDomain.Domain.Service
 {
     public class ProductService : IProductService
     {
-        public Task<bool> Add(Product product)
+        private readonly IProductRepository _productRepository;
+
+        public ProductService(IProductRepository productRepository)
         {
-            throw new NotImplementedException();
+            _productRepository = productRepository;
+        }
+        public async Task<bool> Add(Product product)
+        {
+            return await _productRepository.Add(product);
         }
 
-        public Task<bool> Delete(Guid productid)
+        public async Task<bool> Delete(Guid productId)
         {
-            throw new NotImplementedException();
+            return await _productRepository.Delete(productId);
         }
 
-        public Task<IEnumerable<Product>> GetAll()
+        public async Task<IEnumerable<Product>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _productRepository.GetAll();
         }
 
-        public Task<Product> GetById(Guid productid)
+        public async Task<Product> GetById(Guid productId)
         {
-            throw new NotImplementedException();
+            return await _productRepository.GetById(productId);
         }
 
-        public Task<Product> Update(Product product)
+        public async Task<Product> Update(Product product)
         {
-            throw new NotImplementedException();
+            return await _productRepository.Update(product);
         }
     }
 }
