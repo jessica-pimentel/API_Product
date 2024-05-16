@@ -1,4 +1,9 @@
 
+using wakeDomain.Domain.Interfaces.Repository;
+using wakeDomain.Domain.Interfaces.Service;
+using wakeDomain.Domain.Service;
+using wakeInfra.Infra.Repository;
+
 public static class DependencyInjectionConfig
 {
 
