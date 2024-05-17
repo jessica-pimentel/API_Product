@@ -16,12 +16,22 @@ public class ProductController : BaseController
         [HttpPost("register")]
         public async Task<ActionResult> Add([FromBody] Product product)
         {
-            var result = await _productService.Add(product);
+            try
+            {
+                var result = await _productService.Add(product);
+                if (result)
+                    return CustomResponse($"Produto {product.ProductName} com preço {product.ProductPrice} adicionado com sucesso!");
 
-            if (result)
-                return CustomResponse($"Produto {product.ProductName} com preço {product.ProductPrice} adicionado com sucesso!");
-
-            return CustomResponseError("Erro ao tentar adicionar produto.");
+                return CustomResponseError("Erro ao tentar adicionar produto.");
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    errors = new List<string> { ex.Message }
+                });
+            }
 
         }
 
@@ -31,22 +41,43 @@ public class ProductController : BaseController
             if (productId != product.ProductId)
                 return CustomResponseError("Produto não encontrado.");
 
-            var updatedProduct = await _productService.Update(product);
+            try
+            {
+                var updatedProduct = await _productService.Update(product);
+                if (updatedProduct == null)
+                    return CustomResponseError("Produto não encontrado.");
 
-            if (updatedProduct == null)
-                return CustomResponseError("Produto não encontrado.");
-
-            return CustomResponse("Produto atualizado com sucesso!");
+                return CustomResponse("Produto atualizado com sucesso!");
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    errors = new List<string> { ex.Message }
+                });
+            }
         }
 
         [HttpDelete("delete/{productId}")]
         public async Task<IActionResult> Delete(Guid productId)
         {
-            var result = await _productService.Delete(productId);
-            if (result)
-                return CustomResponse("Produto deletado com sucesso!");
+            try
+            {
+                var result = await _productService.Delete(productId);
+                if (result)
+                    return CustomResponse("Produto deletado com sucesso!");
 
-            return CustomResponseError("Produto não encontrad.");
+                return CustomResponseError("Produto não encontrado.");
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new
+                {
+                    success = false,
+                    errors = new List<string> { ex.Message }
+                });
+            }
         }
 
         [HttpGet("getAll")]
@@ -59,11 +90,22 @@ public class ProductController : BaseController
         [HttpGet("getById/{productId}")]
         public async Task<ActionResult<Product>> GetById(Guid productId)
         {
-            var product = await _productService.GetById(productId);
-            if (product == null)
-                return CustomResponseError("Produto não encontrado.");
+            try
+            {
+                var product = await _productService.GetById(productId);
+                if (product == null)
+                    return CustomResponseError("Produto não encontrado.");
 
-            return CustomResponse(product);
+                return CustomResponse(product);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new
+                {
+                    success = false,
+                    errors = new List<string> { ex.Message }
+                });
+            }
         }
 
         [HttpGet("orderByType")]

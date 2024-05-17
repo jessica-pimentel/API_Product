@@ -12,28 +12,35 @@ namespace wakeApi.Tests.Repositories
 {
     public class ProductRepositoryTests
     {
-        private readonly ProductContext _context;
-        private readonly ProductRepository _productRepository;
+        private readonly DbContextOptions<ProductContext> _options;
 
         public ProductRepositoryTests()
         {
-            var options = new DbContextOptionsBuilder<ProductContext>()
+            
+            _options = new DbContextOptionsBuilder<ProductContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
                 .Options;
-
-            _context = new ProductContext(options);
-            _productRepository = new ProductRepository(_context);
+        }
+        private ProductContext CreateContext()
+        {
+            var context = new ProductContext(_options);
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+            return context;
         }
 
         [Fact(DisplayName = "Deve Permitir Adicionar Produto Com Preco Positivo")]
         public async Task DevePermitirAdicionarProdutoComPrecoPositivo()
         {
+            
             var product = new Product { ProductName = "produto teste", ProductPrice = 10m };
+            using var context = CreateContext();
+            var repository = new ProductRepository(context);
 
-            var result = await _productRepository.Add(product);
-
+            var result = await repository.Add(product);
+            
             Assert.True(result);
-            Assert.Equal(1, _context.Products.Count());
+            Assert.Equal(1, context.Products.Count());
         }
 
         [Fact(DisplayName = "Deve Retornar Todos os Produtos")]
@@ -44,10 +51,14 @@ namespace wakeApi.Tests.Repositories
                 new Product { ProductName = "Product 1", ProductPrice = 10m },
                 new Product { ProductName = "Product 2", ProductPrice = 20m }
             };
-            _context.Products.AddRange(products);
-            await _context.SaveChangesAsync();
 
-            var result = await _productRepository.GetAll();
+            using var context = CreateContext();
+            await context.Products.AddRangeAsync(products);
+            await context.SaveChangesAsync();
+
+            var repository = new ProductRepository(context);
+            
+            var result = await repository.GetAll();
 
             Assert.Equal(products.Count, result.Count());
         }
@@ -56,8 +67,10 @@ namespace wakeApi.Tests.Repositories
         public async Task GetById_ProductNotFound_ShouldThrowKeyNotFoundException()
         {
             var productId = Guid.NewGuid();
+            using var context = CreateContext();
+            var repository = new ProductRepository(context);
 
-            var exception = await Assert.ThrowsAsync<KeyNotFoundException>(() => _productRepository.GetById(productId));
+            var exception = await Assert.ThrowsAsync<KeyNotFoundException>(() => repository.GetById(productId));
             Assert.Equal("Produto não encontrado.", exception.Message);
         }
 
@@ -65,11 +78,14 @@ namespace wakeApi.Tests.Repositories
         public async Task DeveFazerAtualizacaoSePrecoPositivoEValido()
         {
             var product = new Product { ProductName = "produto teste", ProductPrice = 10m };
-            await _context.Products.AddAsync(product);
-            await _context.SaveChangesAsync();
+            using var context = CreateContext();
+            await context.Products.AddAsync(product);
+            await context.SaveChangesAsync();
+
+            var repository = new ProductRepository(context);
             product.ProductPrice = 20m;
 
-            var result = await _productRepository.Update(product);
+            var result = await repository.Update(product);
 
             Assert.Equal(20m, result.ProductPrice);
         }
@@ -78,13 +94,16 @@ namespace wakeApi.Tests.Repositories
         public async Task DeveRetornarVerdadeiroQuandoProdutoDeletadoComSucesso()
         {
             var product = new Product { ProductName = "produto teste", ProductPrice = 10m };
-            await _context.Products.AddAsync(product);
-            await _context.SaveChangesAsync();
+            using var context = CreateContext();
+            await context.Products.AddAsync(product);
+            await context.SaveChangesAsync();
 
-            var result = await _productRepository.Delete(product.ProductId);
+            var repository = new ProductRepository(context);
+
+            var result = await repository.Delete(product.ProductId);
 
             Assert.True(result);
-            Assert.Equal(0, _context.Products.Count(p => p.IsDeleted == 0));
+            Assert.Equal(0, context.Products.Count(p => p.IsDeleted == 0));
         }
     }
 }

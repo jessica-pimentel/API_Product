@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +33,13 @@ namespace wakeApi.Tests.Controllers
 
             Assert.NotNull(result);
             Assert.Equal(200, result.StatusCode);
-            Assert.Equal($"Produto {product.ProductName} com preço {product.ProductPrice} adicionado com sucesso!", result.Value);
+            Assert.IsType<OkObjectResult>(result);
+
+            var json = JsonConvert.SerializeObject(result.Value);
+            var value = JsonConvert.DeserializeObject<dynamic>(json);
+
+            Assert.True((bool)value.success);
+            Assert.Equal($"Produto {product.ProductName} com preço {product.ProductPrice} adicionado com sucesso!", (string)value.data);
         }
 
         [Fact(DisplayName = "Nao Deve Adicionar Produto Com Preco Negativo")]
@@ -44,7 +52,13 @@ namespace wakeApi.Tests.Controllers
 
             Assert.NotNull(result);
             Assert.Equal(400, result.StatusCode);
-            Assert.Equal("O valor do produto não pode ser negativo.", result.Value);
+            Assert.IsType<BadRequestObjectResult>(result);
+
+            var json = JsonConvert.SerializeObject(result.Value);
+            var value = JsonConvert.DeserializeObject<dynamic>(json);
+
+            Assert.False((bool)value.success);
+            Assert.Contains("O valor do produto não pode ser negativo.", value.errors.ToObject<List<string>>());
         }
 
         [Fact(DisplayName = "Deve Retornar Todos os Produtos")]
@@ -62,7 +76,25 @@ namespace wakeApi.Tests.Controllers
 
             Assert.NotNull(result);
             Assert.Equal(200, result.StatusCode);
-            Assert.Equal(products, result.Value);
+            Assert.IsType<OkObjectResult>(result);
+
+            var json = JsonConvert.SerializeObject(result.Value);
+            var value = JsonConvert.DeserializeObject<dynamic>(json);
+
+            Assert.True((bool)value.success);
+
+            var productList = value.data.ToObject<List<Product>>();
+
+            Assert.Equal(products.Count, productList.Count);
+            for (int i = 0; i < products.Count; i++)
+            {
+                Assert.Equal(products[i].ProductName, productList[i].ProductName);
+                Assert.Equal(products[i].ProductPrice, productList[i].ProductPrice);
+                Assert.Equal(products[i].CreatedAt, productList[i].CreatedAt);
+                Assert.Equal(products[i].Inventory, productList[i].Inventory);
+                Assert.Equal(products[i].IsDeleted, productList[i].IsDeleted);
+                Assert.Equal(products[i].ProductId, productList[i].ProductId);
+            }
         }
 
         [Fact(DisplayName = "Deve Retornar Produto Não Encontrado Quando ProductId Não Encontrado")]
@@ -76,7 +108,13 @@ namespace wakeApi.Tests.Controllers
 
             Assert.NotNull(result);
             Assert.Equal(404, result.StatusCode);
-            Assert.Equal("Produto não encontrado.", result.Value);
+            Assert.IsType<NotFoundObjectResult>(result);
+
+            var json = JsonConvert.SerializeObject(result.Value);
+            var value = JsonConvert.DeserializeObject<dynamic>(json);
+
+            Assert.False((bool)value.success);
+            Assert.Contains("Produto não encontrado.", value.errors.ToObject<List<string>>());
         }
 
         [Fact(DisplayName = "Deve Fazer Atualizacao Se Preco Positivo E Valido")]
@@ -90,7 +128,13 @@ namespace wakeApi.Tests.Controllers
 
             Assert.NotNull(result);
             Assert.Equal(200, result.StatusCode);
-            Assert.Equal("Produto atualizado com sucesso!", result.Value);
+            Assert.IsType<OkObjectResult>(result);
+
+            var json = JsonConvert.SerializeObject(result.Value);
+            var value = JsonConvert.DeserializeObject<dynamic>(json);
+
+            Assert.True((bool)value.success);
+            Assert.Equal("Produto atualizado com sucesso!", (string)value.data);
         }
 
         [Fact(DisplayName = "Nao Deve Fazer Atualizacao Se Preco Negativo")]
@@ -104,7 +148,13 @@ namespace wakeApi.Tests.Controllers
 
             Assert.NotNull(result);
             Assert.Equal(400, result.StatusCode);
-            Assert.Equal("O valor do produto não pode ser negativo.", result.Value);
+            Assert.IsType<BadRequestObjectResult>(result);
+
+            var json = JsonConvert.SerializeObject(result.Value);
+            var value = JsonConvert.DeserializeObject<dynamic>(json);
+
+            Assert.False((bool)value.success);
+            Assert.Contains("O valor do produto não pode ser negativo.", value.errors.ToObject<List<string>>());
         }
 
         [Fact(DisplayName = "Deve Retornar Verdadeiro Quando Produto Deletado Com Sucesso")]
@@ -117,7 +167,13 @@ namespace wakeApi.Tests.Controllers
 
             Assert.NotNull(result);
             Assert.Equal(200, result.StatusCode);
-            Assert.Equal("Produto deletado com sucesso!", result.Value);
+            Assert.IsType<OkObjectResult>(result);
+
+            var json = JsonConvert.SerializeObject(result.Value);
+            var value = JsonConvert.DeserializeObject<dynamic>(json);
+
+            Assert.True((bool)value.success);
+            Assert.Equal("Produto deletado com sucesso!", (string)value.data);
         }
 
         [Fact(DisplayName = "Deve Retornar Produto Não Encontrado Quando Tentativa Deletar Produto Não Encontrado")]
@@ -130,7 +186,13 @@ namespace wakeApi.Tests.Controllers
 
             Assert.NotNull(result);
             Assert.Equal(404, result.StatusCode);
-            Assert.Equal("Produto não encontrado.", result.Value);
+            Assert.IsType<NotFoundObjectResult>(result);
+
+            var json = JsonConvert.SerializeObject(result.Value);
+            var value = JsonConvert.DeserializeObject<dynamic>(json);
+
+            Assert.False((bool)value.success);
+            Assert.Contains("Produto não encontrado.", value.errors.ToObject<List<string>>());
         }
     }
 }

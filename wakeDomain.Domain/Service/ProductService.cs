@@ -37,7 +37,11 @@ namespace wakeDomain.Domain.Service
 
         public async Task<Product> GetById(Guid productId)
         {
-            return await _productRepository.GetById(productId);
+            var product = await _productRepository.GetById(productId);
+            if (product == null)
+                throw new KeyNotFoundException("Produto não encontrado.");
+
+            return product;
         }
 
         public async Task<Product> Update(Product product)
