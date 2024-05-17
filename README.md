@@ -2,8 +2,9 @@
 
 ## Descrição
 
-Este é um projeto ASP.NET Core Web API construído para realizar o CRUD de `Produto` com os seguintes requisitos funcionais:
+Este é um projeto ASP.NET Core Web API construído para realizar o CRUD de `Produto` com os seguintes requisitos:
 
+**FUNCIONAIS**:
 - **Criar um produto**
   - O valor do produto não pode ser negativo
 - Atualizar um produto
@@ -12,6 +13,7 @@ Este é um projeto ASP.NET Core Web API construído para realizar o CRUD de `Pro
   - Visualizar um produto específico
   - Ordenar os produtos por diferentes campos
   - Buscar produto pelo nome
+- Projeto de Testes Unitários
 
 A solução utiliza o Entity Framework para interagir com o banco de dados e está configurada para funcionar com um banco de dados em memória para o desenvolvimento e os testes que buscam os dados já armazenados.
 
