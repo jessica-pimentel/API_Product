@@ -84,7 +84,9 @@ namespace wakeInfra.Infra.Repository
 
         public async Task<IEnumerable<Product>> SearchByName(string name)
         {
-            return await _context.Products.Where(p => p.ProductName.Contains(name) && p.IsDeleted == 0).ToListAsync();
+            return await _context.Products
+               .Where(p => p.ProductName.ToLower().Contains(name.ToLower()) && p.IsDeleted == 0)
+               .ToListAsync();
         }
 
         public async Task<IEnumerable<Product>> OrderByType(string type)
@@ -93,10 +95,10 @@ namespace wakeInfra.Infra.Repository
 
             switch (type.ToLower())
             {
-                case "name":
+                case "productName":
                     query = query.OrderBy(p => p.ProductName);
                     break;
-                case "price":
+                case "productPrice":
                     query = query.OrderBy(p => p.ProductPrice);
                     break;
                 case "inventory":

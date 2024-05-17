@@ -65,7 +65,6 @@ namespace wakeApi.Tests.Services
             var productId = Guid.NewGuid();
             _productRepositoryMock.Setup(repo => repo.GetById(productId)).ReturnsAsync((Product)null);
 
-            // Act & Assert
             var exception = await Assert.ThrowsAsync<KeyNotFoundException>(() => _productService.GetById(productId));
             Assert.Equal("Produto não encontrado.", exception.Message);
         }

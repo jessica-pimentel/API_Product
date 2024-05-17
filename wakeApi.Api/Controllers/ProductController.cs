@@ -67,16 +67,16 @@ public class ProductController : BaseController
         }
 
         [HttpGet("orderByType")]
-        public async Task<ActionResult<IEnumerable<Product>>> OrderByType([FromQuery] string type)
+        public async Task<ActionResult<IEnumerable<Product>>> OrderByType([FromBody] string type)
         {
             var products = await _productService.OrderByType(type);
-            return CustomResponse(products); ;
+            return CustomResponse(products); 
         }
 
         [HttpGet("searchByName")]
-        public async Task<ActionResult<IEnumerable<Product>>> SearchByName([FromQuery] string name)
+        public async Task<ActionResult<IEnumerable<Product>>> SearchByName([FromBody] string name)
         {
             var products = await _productService.SearchByName(name);
-            return CustomResponse(products); ;
+            return CustomResponse(products); 
         }
 }
