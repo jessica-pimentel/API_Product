@@ -35,16 +35,17 @@ namespace wakeInfra.Infra.Repository
         {
             var product = await _context.Products.FindAsync(productId);
 
-            if (product != null)
-            {
-                product.IsDeleted = 1;
-                product.UpdatedAt = DateTime.Now;
-                _context.Products.Update(product);
-                await _context.SaveChangesAsync();
-                return true;
-            }
+            if (product == null)
+                throw new KeyNotFoundException("Produto não encontrado.");
 
-            return false;
+            product.IsDeleted = 1;
+            product.UpdatedAt = DateTime.Now;
+
+            _context.Products.Update(product);
+
+            await _context.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<IEnumerable<Product>> GetAll()
@@ -54,28 +55,31 @@ namespace wakeInfra.Infra.Repository
 
         public async Task<Product> GetById(Guid productId)
         {
-            return await _context.Products.FirstOrDefaultAsync(p => p.ProductId == productId && p.IsDeleted == 0);
+            var product = await _context.Products.FirstOrDefaultAsync(p => p.ProductId == productId && p.IsDeleted == 0);
+
+            if (product == null)
+                throw new KeyNotFoundException("Produto não encontrado.");
+
+            return product;
         }
 
         public async Task<Product> Update(Product product)
         {
             var existingProduct = await _context.Products.FindAsync(product.ProductId);
 
-            if (existingProduct != null && existingProduct.IsDeleted == 0)
-            {
-                existingProduct.ProductName = product.ProductName;
-                existingProduct.ProductPrice = product.ProductPrice;
-                existingProduct.Inventory = product.Inventory;
-                existingProduct.UpdatedAt = DateTime.Now;
+            if (existingProduct == null || existingProduct.IsDeleted != 0)
+                throw new KeyNotFoundException("Produto não encontrado.");
 
-                _context.Products.Update(existingProduct);
+            existingProduct.ProductName = product.ProductName;
+            existingProduct.ProductPrice = product.ProductPrice;
+            existingProduct.Inventory = product.Inventory;
+            existingProduct.UpdatedAt = DateTime.Now;
 
-                await _context.SaveChangesAsync();
+            _context.Products.Update(existingProduct);
 
-                return existingProduct;
-            }
+            await _context.SaveChangesAsync();
 
-            return null;
+            return existingProduct;
         }
 
         public async Task<IEnumerable<Product>> SearchByName(string name)
@@ -99,7 +103,7 @@ namespace wakeInfra.Infra.Repository
                     query = query.OrderBy(p => p.Inventory);
                     break;
                 default:
-                    break;
+                    throw new ArgumentException("Tipo de ordenação não suportado.");
             }
 
             return await query.ToListAsync();
