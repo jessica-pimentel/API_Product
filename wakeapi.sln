@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "wakeDomain.Domain", "wakeDo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "wakeInfra.Infra", "wakeInfra.Infra\wakeInfra.Infra.csproj", "{ECC188B0-CA8A-4E43-A05C-E87E48DEE1F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wakeApi.Tests", "wakeApi.Tests\wakeApi.Tests.csproj", "{52326C00-D585-4076-821D-498B6F9B2A31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "wakeApi.Tests", "wakeApi.Tests\wakeApi.Tests.csproj", "{52326C00-D585-4076-821D-498B6F9B2A31}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
