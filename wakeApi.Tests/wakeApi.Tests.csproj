@@ -19,16 +19,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\wakeApi.Api\wakeApi.Api.csproj" />
     <ProjectReference Include="..\wakeDomain.Domain\wakeDomain.Domain.csproj" />
     <ProjectReference Include="..\wakeInfra.Infra\wakeInfra.Infra.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Using Include="Xunit" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>
