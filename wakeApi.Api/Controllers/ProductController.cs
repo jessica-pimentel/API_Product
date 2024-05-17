@@ -16,9 +16,6 @@ public class ProductController : BaseController
         [HttpPost("register")]
         public async Task<ActionResult> Add([FromBody] Product product)
         {
-            if (!ModelState.IsValid)
-                return CustomResponse(ModelState);
-
             var result = await _productService.Add(product);
 
             if (result)
@@ -33,9 +30,6 @@ public class ProductController : BaseController
         {
             if (productId != product.ProductId)
                 return CustomResponseError("Produto não encontrado.");
-
-            if (!ModelState.IsValid)
-                return CustomResponse(ModelState);
 
             var updatedProduct = await _productService.Update(product);
 
