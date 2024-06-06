@@ -2,7 +2,7 @@
 
 ## Descrição
 
-Este é um projeto ASP.NET Core Web API construído para realizar o CRUD de `Produto` com os seguintes requisitos:
+Este é um projeto ASP.NET Core Web API construído para realizar o CRUD de `Produto`, com os seguintes requisitos:
 
 **FUNCIONAIS**:
 - **Criar um produto**
