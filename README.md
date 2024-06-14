@@ -1,6 +1,6 @@
 # WakeApi
 
-## Descrição
+## Descrição da API
 
 Este é um projeto ASP.NET Core Web API construído para realizar o CRUD de `Produto`, com os seguintes requisitos:
 
